@@ -22,14 +22,16 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
                 i++;
             else if(len2 > len1)
                 j++;
-            else
-                i++, j++;;
-         }
+            else{
+                i++;
+                j++;
+            }
+        }
         else
             i++, j++;  //increment both
     }
     diff += (len1 - i) + (len2 - j);
-    return diff<=1;
+    return diff<=d;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
@@ -40,16 +42,6 @@ bool is_adjacent(const string& word1, const string& word2){
     if(abs(len1 - len2) > 1) //string length differ by 2+
         return false;
     
-    if(len1 == len2){ //words are same length
-        int diff = 0;
-        for(int i = 0; i < len1; i++)
-            if(word1[i] != word2[i]){  //iterate through both
-                diff += 1;  //count every difference
-                if(diff > 1)
-                    return false;
-            }
-        return diff <=1;
-    }
     return edit_distance_within(word1, word2, 1); //helper calculates distances
 }
 

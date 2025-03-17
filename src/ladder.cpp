@@ -11,18 +11,25 @@ using namespace std;
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     int i = 0, j = 0;
     int diff = 0;
+    int len1 = str1.length(), len2 = str2.length();
 
-    while(i < d && j < d-1){
+    while(i < len1 && j < len2){
          if(str1[i] != str2[i]){   //iterate through both
-             diff += 1;   //count every difference
-             if(diff > 1)
-                 return false;
-             i++;   //longer string moves onto next word
-             continue; //skip increment on both
+            diff += 1;   //count every difference
+            if(diff > d)
+                return false;
+            if(len1 > len2)
+                i++;
+            else if(len2 > len1)
+                j++;
+            else
+                i++, j++;;
          }
-         i++, j++;  //increment both
-     }
-    return true;
+        else
+            i++, j++;  //increment both
+    }
+    diff += (len1 - i) + (len2 - j);
+    return diff<=1;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
@@ -45,10 +52,7 @@ bool is_adjacent(const string& word1, const string& word2){
     }
 
     else if(len1 != len2){   //words differ by 1 length
-        if(len1 > len2)    //word1 longer
-            return edit_distance_within(word1, word2, len1); //helper calculates distances
-        else
-            return edit_distance_within(word2, word1, len2);
+        return edit_distance_within(word1, word2, 1); //helper calculates distances
     }
     return false;
 }

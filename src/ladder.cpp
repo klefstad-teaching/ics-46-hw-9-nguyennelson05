@@ -14,11 +14,14 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     while(i < d && j < d-1){
         if(str1[i] != str2[i]){   //iterate through both
             diff += 1;   //count every difference
+            if(diff > 1)
+                return false;
             i++;   //longer string moves onto next word
+            continue; //skip increment on both
         }
-        i++, j++;  //loop increment
+        i++, j++;  //increment both
     }
-    return(diff<=1);  //return # of differences
+    return true;
 }
 
 bool is_adjacent(const string& word1, const string& word2){
@@ -29,23 +32,23 @@ bool is_adjacent(const string& word1, const string& word2){
     if(abs(len1 - len2) > 1) //string length differ by 2+
         return false;
     
-    bool adjacent = true;
     if(len1 == len2){ //words are same length
         int diff = 0;
         for(int i = 0; i < len1; i++)
-            if(word1[i] != word2[i])  //iterate through both
+            if(word1[i] != word2[i]){  //iterate through both
                 diff += 1;  //count every difference
-        adjacent = diff<=1;
+                if(diff > 1)
+                    return false;
+            }
+        return true;
     }
 
     if(len1 != len2){   //words differ by 1 length
-        bool word1_longer = len1 > len2;    //find which str longer
-        if(word1_longer)    //word1 longer
-            adjacent = edit_distance_within(word1, word2, len1); //helper calculates distances
-        else if(!word1_longer)
-            adjacent = edit_distance_within(word2, word1, len2);
+        if(len1 > len2)    //word1 longer
+            return edit_distance_within(word1, word2, len1); //helper calculates distances
+        else
+            return edit_distance_within(word2, word1, len2);
     }
-    return adjacent; //more than 1 diff, false
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
@@ -107,10 +110,10 @@ void verify_word_ladder(){
     my_assert(test.size() == 4);
     */
     ///*
-    //my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
+    my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
     my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
-    //my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
-    //my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
     my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
     my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
     //*/

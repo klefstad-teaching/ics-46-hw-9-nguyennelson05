@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <algorithms>
+#include <algorithm>
 
 vector<int> dijkstra_shortest_path(const Graph& G, int source, vector<int>& previous){
     int numVertices = G.size();
